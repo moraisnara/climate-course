@@ -1,0 +1,27 @@
+% crop_djo2012_fig1 — the cross-sectional correlation, lifted from the paper.
+%
+% Not a built figure: this is the temperature panel of Figure 1 in
+% Dell, Jones & Olken (2012), AEJ: Macro 4(3), page 41 of the PDF in ../papers/.
+% Reproducing it from scratch needs PWT/WDI income data, which is not available
+% offline, so the deck shows the paper's own graph with a source line.
+%
+% The trim values crop away the page margins, the "Figure 1:" caption and the
+% two partial Stata border rules, keeping the plot, its axes and its legend.
+% They are in points, measured from the edges of the 612 x 792 pt page.
+% The include stays vector, so it stays sharp when projected.
+%
+% The image path is relative to the working directory, not to this file, so the
+% build has to be run from class_impacts:
+%
+%   cd class_impacts
+%   pdflatex figures_src/crop_djo2012_fig1.tex
+%   mv crop_djo2012_fig1.pdf figures/fig_djo2012_crosssection.pdf
+%
+% Not part of the python figNN_ series, so build_all.py does not pick it up.
+%
+\documentclass[border=0pt]{standalone}
+\usepackage{graphicx}
+\begin{document}
+\includegraphics[page=41, trim=72pt 414pt 150pt 98pt, clip]
+                {"../papers/Olken_Temperature Shocks".pdf}
+\end{document}

@@ -1,0 +1,67 @@
+# ---- LaTeX build artifacts ----
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+texput.log
+
+# ---- Compiled decks ----
+# Tracked deliberately. That warning was written for the two-way Overleaf sync;
+# this repo is single-author and one-way, so there is no concurrent edit to
+# conflict with, and the compiled deck is what you actually want on hand when
+# you open this from another machine.
+# */main.pdf
+
+# ---- Generated figures ----
+# figures_src/ is the truth; figures/ is rebuilt by build_all.py.
+# Uncomment if you'd rather not track the generated PDFs at all:
+# class_impacts/figures/*.pdf
+# class_impacts/figures/*.png
+
+# ---- exercise/ ----
+# What students clone. Two files are tracked on purpose -- the script and the
+# one CSV it reads -- so that a clone runs without downloading 1.9 GB first.
+# Everything the script writes is generated, and stays out.
+exercise/figures/
+exercise/data/derived/*
+!exercise/data/derived/tmax_daily_1961_2019.csv.gz
+
+# ---- Local only ----
+# This repository is public, and it exists to hand two decks and one exercise to
+# students. Everything below is real work that stays on this machine: the
+# private working project, the papers and their reading notes, the house
+# template, the planning documents, the parked frames, and the nine figures
+# whose scripts are not published. Ignored rather than deleted -- all of it is
+# still here on disk.
+replication/
+papers/
+template/
+admin/
+*/OUTLINE.md
+class_empirics/parked_frames.tex
+class_empirics/figures/fig0*.png
+
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# ---- Python ----
+__pycache__/
+*.pyc
+
+# ---- OS ----
+Thumbs.db
+.DS_Store
+
+# ---- Speaker notes ----
+# Untracked: the repo is public, so personal lecture scripts stay local only.
+SPEAKER_NOTES*.md
+SPEAKER_NOTES*.pdf
+NOTES_*.md

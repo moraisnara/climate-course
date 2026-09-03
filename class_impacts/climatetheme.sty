@@ -1,0 +1,145 @@
+%=====================================================================
+%  climatetheme.sty — house style for the FEA/USP climate course decks
+%
+%  Lifted from Nara's Climate Economics repo (Doutorado/Climate Economics),
+%  where the same preamble was pasted into every Class*/main.tex with a
+%  "keep in sync" comment. Here it is a package instead, so the decks
+%  cannot drift apart.
+%
+%  Usage in main.tex:
+%      \documentclass[aspectratio=169,10pt]{beamer}
+%      \usepackage{climatetheme}
+%      \classfooter{Class 1 — Climate Impacts}
+%
+%  Provides: the palette (climteal/climdeep/climorange/climlight/climgrey/
+%  climred), the frame title bar with orange rule and italic subtitle, the
+%  footer, and the helpers \src, \partframe, \todo, \todobox, \todoframe.
+%=====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{climatetheme}[2026/08/29 Climate course beamer theme]
+
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern}
+\RequirePackage{graphicx}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{amsmath}
+
+%---------------------------------------------------------------------
+% PALETTE
+% Mirrors climstyle.py / climstyle.R exactly — a figure's furniture and the
+% slide it sits on must be the same teal, or the deck reads as screenshots.
+%---------------------------------------------------------------------
+\definecolor{climteal}{RGB}{0,95,115}      % primary
+\definecolor{climdeep}{RGB}{20,33,61}      % dark headings / body text
+\definecolor{climorange}{RGB}{202,103,2}   % accent / warning
+\definecolor{climlight}{RGB}{233,236,239}  % light fill
+\definecolor{climgrey}{RGB}{110,120,130}   % captions, sources
+\definecolor{climred}{RGB}{178,24,43}      % warm pole / emphasis
+
+%---------------------------------------------------------------------
+% THEME
+%---------------------------------------------------------------------
+\usetheme{default}
+\useinnertheme{circles}
+
+\setbeamercolor{palette primary}{bg=climteal,fg=white}
+\setbeamercolor{structure}{fg=climteal}
+\setbeamercolor{frametitle}{fg=white,bg=climteal}
+\setbeamercolor{title}{fg=white}
+\setbeamercolor{author}{fg=climlight}
+\setbeamercolor{institute}{fg=climlight}
+\setbeamercolor{normal text}{fg=climdeep}
+\setbeamercolor{itemize item}{fg=climteal}
+\setbeamercolor{itemize subitem}{fg=climorange}
+\setbeamercolor{block title}{fg=white,bg=climteal}
+\setbeamercolor{block body}{bg=climlight}
+\setbeamercolor{section in toc}{fg=climdeep}
+
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{title}{series=\bfseries,size=\LARGE}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+% Frame title: teal band, orange rule, optional italic subtitle underneath.
+% The subtitle parbox is 0.9\textwidth, NOT \paperwidth: the paper is 2cm wider
+% than the text block, so a paperwidth parbox starts inside the margin and runs
+% half a centimetre past the right edge of the slide.
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.6ex,dp=1.2ex,leftskip=0.3cm,rightskip=0.3cm]{frametitle}%
+    \usebeamerfont{frametitle}\insertframetitle%
+  \end{beamercolorbox}%
+  {\color{climorange}\rule{\paperwidth}{1.2pt}}%
+  \ifx\insertframesubtitle\@empty\else%
+    \vskip1.5pt\hspace*{0.3cm}\parbox{0.9\textwidth}{%
+      \color{climgrey}\footnotesize\itshape\insertframesubtitle}%
+  \fi%
+}
+
+% Footer. \classfooter{...} sets the left-hand label; call it in the preamble.
+\newcommand{\@climfooter}{Climate Course}
+\newcommand{\classfooter}[1]{\renewcommand{\@climfooter}{#1}}
+\setbeamertemplate{footline}{%
+  \hbox{\begin{beamercolorbox}[wd=\paperwidth,ht=2.4ex,dp=1ex,leftskip=.3cm,rightskip=.3cm]{}%
+    \color{climgrey}\scriptsize \@climfooter \hfill FEA/USP \hfill \insertframenumber
+  \end{beamercolorbox}}%
+}
+
+%---------------------------------------------------------------------
+% HELPERS
+%---------------------------------------------------------------------
+% Right-aligned grey source line under a figure or table.
+\newcommand{\src}[1]{{\par\vspace{2pt}\raggedleft\color{climgrey}\scriptsize Source: #1\par}}
+
+% Inline marker for content still to be written.
+\newcommand{\todo}[1]{{\color{climorange}\textbf{[\,TO DEVELOP:\ #1\,]}}}
+
+% Visible placeholder block.
+\newcommand{\todobox}[1]{%
+  \begin{tikzpicture}
+    \node[draw=climorange,thick,rounded corners,fill=climorange!8,
+          inner sep=8pt,text width=0.9\linewidth,align=left]
+    {\color{climorange}$\bigstar$\ \textbf{PLACEHOLDER — new content}\\[4pt]
+     \color{climdeep}\small #1};
+  \end{tikzpicture}}
+
+% Whole placeholder frame: \todoframe{Title}{what goes here}
+\newcommand{\todoframe}[2]{%
+  \begin{frame}{#1}
+    \vfill\centering\todobox{#2}\vfill
+  \end{frame}}
+
+% Part / section divider: \partframe{Part I}{The channels}
+\newcommand{\partframe}[2]{%
+  {\setbeamercolor{background canvas}{bg=climteal}
+  \begin{frame}[plain]
+    \vfill
+    \centering
+    {\color{climorange}\rule{0.15\paperwidth}{2pt}}\\[10pt]
+    {\usebeamerfont{title}\color{white}\bfseries #1}\\[6pt]
+    {\color{climlight}\large #2}\\[10pt]
+    {\color{climorange}\rule{0.15\paperwidth}{2pt}}
+    \vfill
+  \end{frame}}}
+
+% Teal title frame: \titleframe{Deck title}{Subtitle}{Hook line}
+\newcommand{\titleframe}[3]{%
+  {\setbeamercolor{background canvas}{bg=climteal}
+  \begin{frame}[plain]
+    \vfill
+    \centering
+    {\color{climorange}\rule{0.2\paperwidth}{2.5pt}}\\[14pt]
+    {\usebeamerfont{title}\color{white}\bfseries #1}\\[8pt]
+    {\color{climlight}\Large #2}\\[6pt]
+    {\color{climlight}\normalsize \emph{#3}}\\[16pt]
+    {\color{climlight} FEA/USP \quad$\cdot$\quad 2026}\\[10pt]
+    {\color{climlight}\footnotesize \insertauthor \, $\cdot$ \, \texttt{naraliviamorais@usp.br}}
+    \vfill
+  \end{frame}}}
+
+\endinput
